@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dachkk_ - Профессиональный стример на Twitch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --twitch-purple: #9147ff;
+            --twitch-purple-dark: #772ce8;
+            --twitch-dark: #0e0e10;
+            --twitch-gray: #1f1f23;
+            --twitch-light: #efeff1;
+            --neon-glow: 0 0 10px rgba(145, 71, 255, 0.7),
+                            0 0 20px rgba(145, 71, 255, 0.5),
+                            0 0 30px rgba(145, 71, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--twitch-dark);
+            color: var(--twitch-light);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            background-image: linear-gradient(to bottom, rgba(14, 14, 16, 0.9), rgba(14, 14, 16, 0.95));
+        }
+
+        /* Частицы для фона */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Шапка сайта */
+        header {
+            background: linear-gradient(to bottom, rgba(31, 31, 35, 0.9), rgba(31, 31, 35, 0.7));
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--twitch-purple);
+            box-shadow: var(--neon-glow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            color: var(--twitch-purple);
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, #a970ff, var(--twitch-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--neon-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--twitch-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-link:hover {
+            color: var(--twitch-purple);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--twitch-purple);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Герой секция */
+        .hero {
+            padding: 80px 0 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--twitch-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--neon-glow);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #bbb;
+        }
+
+        .live-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            animation: blink 1.5s infinite;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Виджеты Twitch */
+        .twitch-section {
+            margin: 50px 0;
+        }
+
+        .twitch-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .twitch-player, .twitch-chat {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+            border: 2px solid var(--twitch-gray);
+            position: relative;
+        }
+
+        .twitch-player:hover, .twitch-chat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(145, 71, 255, 0.3);
+            border-color: var(--twitch-purple);
+        }
+
+        .twitch-player::before, .twitch-chat::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--twitch-purple), #a970ff, var(--twitch-purple));
+            z-index: -1;
+            border-radius: 12px;
+            animation: borderAnimation 3s linear infinite;
+            background-size: 400%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            display: block;
+        }
+
+        /* Информация о стримере */
+        .about-section {
+            background: linear-gradient(45deg, rgba(31, 31, 35, 0.7), rgba(31, 31, 35, 0.9));
+            padding: 60px 0;
+            border-radius: 20px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--twitch-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--twitch-purple), #a970ff, var(--twitch-purple));
+        }
+
+        .section-title {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--twitch-purple), #a970ff);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .streamer-avatar {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-container {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid var(--twitch-gray);
+            position: relative;
+            box-shadow: 0 0 30px rgba(145, 71, 255, 0.3);
+            transition: all 0.4s;
+        }
+
+        .avatar-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(145, 71, 255, 0.5);
+            border-color: var(--twitch-purple);
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .streamer-info {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .streamer-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--twitch-purple);
+        }
+
+        .streamer-info p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .schedule {
+            background: rgba(31, 31, 35, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 3px solid var(--twitch-purple);
+        }
+
+        .schedule h4 {
+            margin-bottom: 15px;
+            color: var(--twitch-purple);
+        }
+
+        .schedule ul {
+            list-style-type: none;
+        }
+
+        .schedule li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .schedule li:last-child {
+            border-bottom: none;
+        }
+
+        /* Социальные сети */
+        .social-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .social-link {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--twitch-gray);
+            color: white;
+            font-size: 30px;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--twitch-purple), #a970ff, var(--twitch-purple));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-8px) scale(1.1);
+            color: white;
+            box-shadow: 0 5px 25px rgba(145, 71, 255, 0.4);
+            border-color: var(--twitch-purple);
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .social-link.twitch:hover { background: #9147ff; }
+        .social-link.twitter:hover { background: #1DA1F2; }
+        .social-link.discord:hover { background: #5865F2; }
+        .social-link.instagram:hover { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-link.youtube:hover { background: #FF0000; }
+
+        /* Галерея клипов */
+        .clips-section {
+            padding: 60px 0;
+        }
+
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .clip-card {
+            background: var(--twitch-gray);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(145, 71, 255, 0.2);
+        }
+
+        .clip-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(145, 71, 255, 0.3);
+            border-color: var(--twitch-purple);
+        }
+
+        .clip-thumb {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clip-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .clip-card:hover .clip-thumb img {
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 50px;
+            opacity: 0.8;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        .clip-card:hover .play-icon {
+            color: var(--twitch-purple);
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .clip-info {
+            padding: 20px;
+        }
+
+        .clip-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .clip-game {
+            color: var(--twitch-purple);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .clip-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Подвал сайта */
+        footer {
+            background: linear-gradient(to bottom, rgba(14, 14, 16, 0.9), rgba(14, 14, 16, 1));
+            padding: 40px 0 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--twitch-purple);
+            position: relative;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-title {
+            color: var(--twitch-purple);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-family: 'Oxanium', sans-serif;
+        }
+
+        .footer-links {
+            list-style-type: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--twitch-purple);
+        }
+
+        .footer-links i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px var(--twitch-purple); }
+            50% { text-shadow: 0 0 20px var(--twitch-purple), 0 0 30px var(--twitch-purple); }
+            100% { text-shadow: 0 0 5px var(--twitch-purple); }
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes borderAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .twitch-container {
+                flex-direction: column;
+            }
+            
+            .twitch-chat {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .schedule {
+                border-left: none;
+                border-top: 3px solid var(--twitch-purple);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div id="particles-js"></div>
+    
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-gamepad logo-icon"></i>
+                    <div class="logo-text">Dachkk_</div>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link">Главная</a>
+                    <a href="#" class="nav-link">Стримы</a>
+                    <a href="#" class="nav-link">Клипы</a>
+                    <a href="#" class="nav-link">Расписание</a>
+                    <a href="#" class="nav-link">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Герой секция -->
+    <section class="hero">
+        <div class="container">
+            <div class="live-badge">
+                <i class="fas fa-circle"></i> LIVE NOW
+            </div>
+            <h1 class="hero-title">Добро пожаловать на стрим Dachkk_</h1>
+            <p class="hero-subtitle">Стримы с отличной атмосферой, топовой игрой и позитивным настроением. Присоединяйся к нашему сообществу!</p>
+        </div>
+    </section>
+    
+    <!-- Виджеты Twitch -->
+    <section class="twitch-section">
+        <div class="container">
+            <div class="twitch-container">
+                <div class="twitch-player">
+                    <iframe src="https://player.twitch.tv/?channel=dachkk_&parent=localhost" allowfullscreen></iframe>
+                </div>
+                <div class="twitch-chat">
+                    <iframe src="https://www.twitch.tv/embed/dachkk_/chat?parent=localhost" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- О стримере -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">О стримере</h2>
+            <div class="about-content">
+                <div class="streamer-avatar">
+                    <div class="avatar-container">
+                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/5d3e1d68-aeac-4e60-af81-1b32a1d6a0d4-profile_image-300x300.png" alt="Dachkk_">
+                    </div>
+                </div>
+                <div class="streamer-info">
+                    <h3>Привет, я Dachkk_!</h3>
+                    <p>Я профессиональный стример на Twitch с 2019 года. Мои стримы — это место, где царит дружеская атмосфера, много юмора и отличная игра. Люблю общаться с чатом и создавать контент, который вдохновляет.</p>
+                    <p>В основном стримлю шутеры и RPG, но иногда устраиваю марафоны по инди-играм. Главное для меня — это комьюнити, которое мы создаём вместе с вами.</p>
+                    
+                    <div class="schedule">
+                        <h4>Расписание стримов:</h4>
+                        <ul>
+                            <li><span>Понедельник - Пятница:</span> <span>19:00 - 23:00</span></li>
+                            <li><span>Суббота:</span> <span>15:00 - 22:00</span></li>
+                            <li><span>Воскресенье:</span> <span>День отдыха</span></li>
+                            <li><span>Особые события:</span> <span>Анонсы в Discord</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Социальные сети -->
+    <section class="social-section">
+        <div class="container">
+            <h2 class="section-title">Присоединяйся к сообществу</h2>
+            <div class="social-links">
+                <a href="https://www.twitch.tv/dachkk_" class="social-link twitch" target="_blank">
+                    <i class="fab fa-twitch"></i>
+                </a>
+                <a href="#" class="social-link twitter" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-link discord" target="_blank">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="#" class="social-link youtube" target="_blank">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" class="social-link instagram" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Галерея клипов -->
+    <section class="clips-section">
+        <div class="container">
+            <h2 class="section-title">Топ клипы</h2>
+            <div class="clips-grid">
+                <div class="clip-card">
+                    <div class="clip-thumb">
+                        <img src="https://clips-media-assets2.twitch.tv/AT-cm%7C1762784519-preview-480x272.jpg" alt="Clip">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Невероятный снайп в Valorant</h3>
+                        <span class="clip-game">VALORANT</span>
+                        <div class="clip-stats">
+                            <span><i class="fas fa-eye"></i> 15K</span>
+                            <span><i class="far fa-calendar"></i> 3 дня назад</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clip-card">
+                    <div class="clip-thumb">
+                        <img src="https://clips-media-assets2.twitch.tv/AT-cm%7C1761228577-preview-480x272.jpg" alt="Clip">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Реакция на эпический момент</h3>
+                        <span class="clip-game">Counter-Strike 2</span>
+                        <div class="clip-stats">
+                            <span><i class="fas fa-eye"></i> 24K</span>
+                            <span><i class="far fa-calendar"></i> 1 неделя назад</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clip-card">
+                    <div class="clip-thumb">
+                        <img src="https://clips-media-assets2.twitch.tv/AT-cm%7C1764787455-preview-480x272.jpg" alt="Clip">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Смех до слёз с подписчиком</h3>
+                        <span class="clip-game">Just Chatting</span>
+                        <div class="clip-stats">
+                            <span><i class="fas fa-eye"></i> 42K</span>
+                            <span><i class="far fa-calendar"></i> 2 дня назад</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Dachkk_</h3>
+                    <p>Профессиональный стример на Twitch. Создаю контент с 2019 года. Люблю игры, общение и позитивную атмосферу.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Быстрые ссылки</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Главная</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Стримы</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Клипы</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Расписание</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fab fa-twitch"></i> Twitch: dachkk_</a></li>
+                        <li><a href="#"><i class="fab fa-discord"></i> Discord</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> dachkk@example.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2023 Dachkk_. Все права защищены. Сайт создан с ❤️ для сообщества. By ABTO_KycTiK
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Инициализация частиц для фона
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#9147ff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#9147ff",
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+        
+        // Проверка онлайн-статуса стримера
+        function checkStreamStatus() {
+            const liveBadge = document.querySelector('.live-badge');
+            // В реальном проекте здесь был бы запрос к Twitch API
+            // Для демо - случайное состояние
+            const isLive = Math.random() > 0.3;
+            
+            if (isLive) {
+                liveBadge.style.display = 'inline-block';
+                document.title = "🔴 LIVE | Dachkk_ - стримы на Twitch";
+            } else {
+                liveBadge.style.display = 'none';
+                document.title = "Dachkk_ - стримы на Twitch";
+            }
+        }
+        
+        // Проверяем статус при загрузке страницы
+        window.onload = function() {
+            checkStreamStatus();
+            // Проверяем каждые 5 минут
+            setInterval(checkStreamStatus, 300000);
+        };
+    </script>
+</body>
+</html>
